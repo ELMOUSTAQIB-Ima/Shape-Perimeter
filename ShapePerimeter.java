@@ -1,11 +1,15 @@
 import edu.duke.*;
 import java.io.File;
+import java.la
 
 public class ShapePerimeter {
+    
+    public java.lang.Iterable<java.io.File> selectedFiles(){}
+
     public double getPerimeter (Shape s) {
         // Start with totalPerim = 0
         double totalPerim = 0.0;
-        // Start wth prevPt = the last point 
+        // Start with prevPt = the last point 
         Point prevPt = s.getLastPoint();
         // For each point currPt in the shape,
         for (Point currPt : s.getPoints()) {
@@ -20,19 +24,52 @@ public class ShapePerimeter {
         return totalPerim;
     }
 
-    public int getNumPoints (Shape s) {
-        // Put code here
-        return 0;
+    public int  getNumPoints (Shape s) {
+        int NumPoints = 0;
+        /*FileResource fr = new FileResource();
+        Shape s = new Shape(fr);*/
+        for(Point P :s.getPoints())
+        {
+            NumPoints++;
+        }
+        System.out.println("NumPoints = " + NumPoints);
+        return NumPoints;
     }
 
-    public double getAverageLength(Shape s) {
-        // Put code here
-        return 0.0;
+    public void getAverageLength() {
+        
+        FileResource fr = new FileResource();
+        Shape s = new Shape(fr);
+        double LengthSides = getPerimeter(s);
+        int NumSides = getNumPoints(s);
+        double AverageLength = LengthSides / NumSides;
+        
+        System.out.println("AverageLength = " + AverageLength);
+        
+        //return AverageLength;
     }
 
-    public double getLargestSide(Shape s) {
-        // Put code here
-        return 0.0;
+    public void getLargestSide() {
+        // return the longest side in the Shape S
+        FileResource fr = new FileResource();
+        Shape s = new Shape(fr);
+        double LongestSide = 0.0;
+        // Start with prevPt = the last point 
+        Point prevPt = s.getLastPoint();
+        // For each point currPt in the shape,
+        for (Point currPt : s.getPoints()) {
+            // Find distance from prevPt point to currPt 
+            double currDist = prevPt.distance(currPt);
+            // Update prevPt to be currPt
+            prevPt = currPt;
+        if ( currDist > LongestSide){
+            LongestSide = currDist;
+        }    
+        }
+         
+        System.out.println(" LongestSide = " + LongestSide );
+        
+        
     }
 
     public double getLargestX(Shape s) {
@@ -40,9 +77,26 @@ public class ShapePerimeter {
         return 0.0;
     }
 
-    public double getLargestPerimeterMultipleFiles() {
+    public void getLargestPerimeterMultipleFiles() {
+        /*CREATE a DirectoryResource (so you can select multiple files)
+        and then iterates over thes files */
+        double LargestPerimeter = 0.0;
+        DirectoryResource dr = new DirectoryResource();
+        FileResource fr = null;
+        
+        for(File f : dr.selectedFiles()){
+            fr = new FileResource(f);
+            Shape s = new Shape(fr);
+            double ShapePerimeter = getPerimeter(s);
+            if(ShapePerimeter > LargestPerimeter){
+               LargestPerimeter = ShapePerimeter;
+            }
+            
+        }
+        
+        System.out.println(" LargestPerimeter = " + LargestPerimeter);
         // Put code here
-        return 0.0;
+        //return ;
     }
 
     public String getFileWithLargestPerimeter() {
@@ -78,17 +132,21 @@ public class ShapePerimeter {
         double peri = getPerimeter(triangle);
         System.out.println("perimeter = "+peri);
     }
+    
+
 
     // This method prints names of all files in a chosen folder that you can use to test your other methods
     public void printFileNames() {
         DirectoryResource dr = new DirectoryResource();
+
         for (File f : dr.selectedFiles()) {
             System.out.println(f);
         }
     }
 
     public static void main (String[] args) {
+
         ShapePerimeter pr = new ShapePerimeter();
-        pr.testPerimeter();
+        pr.getLargestPerimeterMultipleFiles();
     }
 }
